@@ -1,7 +1,7 @@
-package glavni.app;
+package main.app.controller;
 
-import glavni.http.Request;
-import glavni.http.response.Response;
+import main.http.Request;
+import main.http.response.Response;
 
 public abstract class Controller {
 

@@ -1,4 +1,4 @@
-package glavni.http;
+package main.http;
 
 public enum HttpMethod {
     GET, POST
