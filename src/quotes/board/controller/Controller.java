@@ -1,7 +1,7 @@
-package main.app.controller;
+package quotes.board.controller;
 
-import main.http.Request;
-import main.http.response.Response;
+import http.Request;
+import http.response.Response;
 
 public abstract class Controller {
 
@@ -12,5 +12,6 @@ public abstract class Controller {
     }
 
     public abstract Response doGet();
+
     public abstract Response doPost();
 }

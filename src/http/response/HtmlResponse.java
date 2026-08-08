@@ -1,6 +1,7 @@
-package main.http.response;
+package http.response;
 
 public class HtmlResponse extends Response {
+
     private final String html;
 
     public HtmlResponse(String html) {

@@ -1,20 +1,22 @@
-package helper.app;
+package quotes.service;
 
-import main.app.Quote;
+import quotes.Quote;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class QuoteStorage {
-    private final List<Quote> quoteList = new ArrayList<>();
+
     private static final QuoteStorage instance = new QuoteStorage();
+
+    private final List<Quote> quoteList = new ArrayList<>();
+
+    private QuoteStorage() {
+        initQuotes();
+    }
 
     public static QuoteStorage getInstance() {
         return instance;
-    }
-
-    private QuoteStorage(){
-        initQuotes();
     }
 
     private void initQuotes() {

@@ -1,12 +1,12 @@
-package main.app.controller;
+package quotes.board.controller;
 
-import main.app.Quote;
-import main.app.QuoteOfTheDayGetter;
-import main.app.QuotesStorage;
-import main.http.Request;
-import main.http.response.HtmlResponse;
-import main.http.response.RedirectResponse;
-import main.http.response.Response;
+import http.Request;
+import http.response.HtmlResponse;
+import http.response.RedirectResponse;
+import http.response.Response;
+import quotes.Quote;
+import quotes.board.QuoteOfTheDayClient;
+import quotes.board.QuotesStorage;
 
 import java.util.List;
 
@@ -18,9 +18,7 @@ public class QuotesController extends Controller {
 
     @Override
     public Response doGet() {
-        QuoteOfTheDayGetter getter = new QuoteOfTheDayGetter();
-        Quote quote = getter.getQuoteOfTheDay();
-
+        Quote quote = new QuoteOfTheDayClient().getQuoteOfTheDay();
         List<Quote> quotes = QuotesStorage.getInstance().getQuotes();
 
         StringBuilder html = new StringBuilder();
@@ -43,11 +41,11 @@ public class QuotesController extends Controller {
             <h2>Quote of the day</h2>
             """);
 
-        html.append("<p><b>")
-                .append(quote.author())
-                .append("</b> - \"")
-                .append(quote.text())
-                .append("\"</p>");
+        if (quote != null) {
+            html.append(renderQuote(quote));
+        } else {
+            html.append("<p><i>Quote of the day is unavailable right now.</i></p>");
+        }
 
         html.append("""
             <hr>
@@ -55,16 +53,12 @@ public class QuotesController extends Controller {
             <h2>Saved quotes</h2>
             """);
 
-        for (Quote curr : quotes) {
+        for (Quote saved : quotes) {
             html.append("""
                 <div style="margin-bottom: 12px;">
                     <hr>
                 """)
-                    .append("<p><b>")
-                    .append(curr.author())
-                    .append("</b> - \"")
-                    .append(curr.text())
-                    .append("\"</p>")
+                    .append(renderQuote(saved))
                     .append("</div>");
         }
 
@@ -80,5 +74,18 @@ public class QuotesController extends Controller {
                 )
         );
         return new RedirectResponse("/quotes");
+    }
+
+    private static String renderQuote(Quote quote) {
+        return "<p><b>" + escapeHtml(quote.author()) + "</b> - \"" + escapeHtml(quote.text()) + "\"</p>";
+    }
+
+    private static String escapeHtml(String value) {
+        if (value == null) return "";
+        return value
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;");
     }
 }

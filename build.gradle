@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.14.0'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+    options.encoding = 'UTF-8'
+}
+
+def quoteSystemProperties = providers.systemPropertiesPrefixedBy('quotes.')
+
+tasks.register('runQuoteService', JavaExec) {
+    group = 'application'
+    description = 'Runs the quote-of-the-day JSON service (default port 8114).'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'quotes.service.Main'
+    systemProperties = quoteSystemProperties.get()
+}
+
+tasks.register('runQuoteBoard', JavaExec) {
+    group = 'application'
+    description = 'Runs the HTML quote board (default port 8113).'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'quotes.board.Main'
+    systemProperties = quoteSystemProperties.get()
+}

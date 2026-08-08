@@ -1,4 +1,4 @@
-package main.app;
+package quotes;
 
 public record Quote(String author, String text) {
 }
